@@ -1,15 +1,31 @@
-{
-    "characters": [
-        {
-        "_id": "60a4d3b193b76f18901aae9d",
-        "name": "Yanfei",
-        "weaponType": "Catalyst",
-        "rarity": 4,
-        "cardImageURL": "https://res.cloudinary.com/dnoibyqq2/image/upload/v1617899636/genshin-app/characters/yanfei/card.jpg"
-        }
-    ],
-    "_id": "60a4d22e984c49383c6ae0d0",
-    "name": "Bloodjade Branch",
-    "iconUrl": "https://res.cloudinary.com/dnoibyqq2/image/upload/v1620824560/genshin-app/talent-boss-items/tail-of-boreas.png",
-    "__v": 0
-}
+const mongoose = require("mongoose");
+
+const CharacterSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId, // The character's _id (as an ObjectId)
+  name: String,
+  weaponType: String,
+  rarity: Number,
+  cardImageURL: String
+});
+
+const TalentBookSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  iconUrl: {
+    type: String,
+    required: true
+  },
+  rarity: {
+    type: Number,
+    required: true
+  },
+  farmingDays: {
+    type: [String],
+    required: true
+  },
+  characters: [CharacterSchema]
+});
+
+module.exports = mongoose.model("TalentBook", TalentBookSchema);
