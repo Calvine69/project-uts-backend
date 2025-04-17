@@ -6,4 +6,4 @@ const getLocalSpecialtyByName = (name) => LocalSpecialty.findOne({ name }).popul
 module.exports = {
   getAllLocalSpecialties,
   getLocalSpecialtyByName
-};s
+};
