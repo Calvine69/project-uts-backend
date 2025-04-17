@@ -4,6 +4,8 @@
   "description": "Simple Genshin Impact FanApp made with React Native to help farm materials for characters and weapons. Also serves as a database for weapons and characters information. You can set timers to notify yourself when your resin replenishes or when the parametric transformer is ready to be used again.",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +19,8 @@
   },
   "homepage": "https://github.com/Calvine69/project-uts-backend#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
     "mongoose": "^8.13.2"
   },
