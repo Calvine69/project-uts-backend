@@ -16,9 +16,14 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Middleware
 app.use(express.json());
 
-// Tambahkan routing karakter (gunakan /characters sebagai base path)
+// Tambahkan routing karakter
 const characterRoutes = require('./routes/characterRoutes');
 app.use('/characters', characterRoutes);
+//Tambahkan routing enemy drop
+const enemyDropRoutes = require('./routes/enemyDropRoutes');
+app.use('/enemyDrop', enemyDropRoutes);
+
+
 
 // Route default
 app.get('/', (req, res) => {
