@@ -22,7 +22,9 @@ app.use('/characters', characterRoutes);
 //Tambahkan routing enemy drop
 const enemyDropRoutes = require('./routes/enemyDropRoutes');
 app.use('/enemyDrop', enemyDropRoutes);
-
+//Tambahkan routing weapon
+const weaponRoutes = require('./routes/weaponRoutes');
+app.use('/weapon', weaponRoutes);
 
 
 // Route default
