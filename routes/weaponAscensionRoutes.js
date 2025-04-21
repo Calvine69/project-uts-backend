@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/weaponAscensionController");
 
-router.get("/", controller.getAll);
-router.get("/:name", controller.getByName);
-router.post("/", controller.create);
-router.put("/:name", controller.update);
-router.delete("/:name", controller.remove);
-router.delete("/", controller.removeAll);
+router.get("/", controller.getAllWeaponAscensions);
+router.get("/:name", controller.getWeaponAscensionByName);
+router.post("/", controller.createWeaponAscension);
+router.put("/:name", controller.updateWeaponAscension);
+router.delete("/:name", controller.deleteWeaponAscension);
+router.delete("/", controller.deleteAllWeaponAscensions);
 
 module.exports = router;
