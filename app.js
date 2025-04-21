@@ -25,6 +25,9 @@ app.use('/enemyDrop', enemyDropRoutes);
 //Tambahkan routing weapon
 const weaponRoutes = require('./routes/weaponRoutes');
 app.use('/weapon', weaponRoutes);
+//Tambahkan routing weapon ascension
+const weaponAscensionRoutes = require('./routes/weaponAscensionRoutes');
+app.use('/weaponAscension', weaponAscensionRoutes);
 
 
 // Route default
