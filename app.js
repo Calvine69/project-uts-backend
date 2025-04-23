@@ -28,9 +28,12 @@ app.use('/weapon', weaponRoutes);
 //Tambahkan routing weapon ascension
 const weaponAscensionRoutes = require('./routes/weaponAscensionRoutes');
 app.use('/weaponAscension', weaponAscensionRoutes);
-//Tambahkan routing weapon ascension
+//Tambahkan routing enemy
 const enemyRoutes = require('./routes/enemyRoutes');
 app.use('/enemy', enemyRoutes);
+//Tambahkan routing talentbook
+const talentBookRoutes = require("./routes/talentBookRoutes");
+app.use("/talentBook", talentBookRoutes)
 
 
 
