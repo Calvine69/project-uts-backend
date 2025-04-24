@@ -1,3 +1,4 @@
+// controllers/weaponAscensionController.js
 const WeaponAscension = require("../models/weaponAscension");
 
 // CREATE: Tambah satu atau banyak ascension
