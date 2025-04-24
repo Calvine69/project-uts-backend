@@ -11,10 +11,17 @@ exports.createEnemy = async (req, res) => {
   }
 };
 
-// READ: Ambil semua enemy
+// READ: Ambil semua enemy (dengan optional filter by name)
 exports.getAllEnemies = async (req, res) => {
   try {
-    const enemies = await Enemy.find();
+    const { name } = req.query;
+    let filter = {};
+
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' }; // case-insensitive
+    }
+
+    const enemies = await Enemy.find(filter);
     res.status(200).json(enemies);
   } catch (err) {
     res.status(500).json({ error: err.message });
