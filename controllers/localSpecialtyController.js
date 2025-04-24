@@ -1,10 +1,27 @@
 const LocalSpeciality = require('../models/localSpecialty');
 
-// GET: Ambil semua local specialties
+// GET: Ambil semua local specialties dengan filter
 exports.getAllLocalSpecialities = async (req, res) => {
   try {
-    // Gunakan populate untuk mengambil detail karakter jika diperlukan
-    const localSpecialities = await LocalSpeciality.find().populate('characters');
+    // Mengambil query parameter untuk filter
+    const { name, source, character } = req.query;
+
+    // Filter objek berdasarkan query parameter
+    const filter = {};
+
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' }; // Pencarian nama yang tidak sensitif terhadap huruf besar/kecil
+    }
+    if (source) {
+      filter.sources = { $in: [source] }; // Menyaring berdasarkan sumber
+    }
+    if (character) {
+      filter.characters = { $in: [character] }; // Menyaring berdasarkan karakter
+    }
+
+    // Ambil data dengan filter dan populasi karakter jika perlu
+    const localSpecialities = await LocalSpeciality.find(filter).populate('characters');
+    
     res.status(200).json(localSpecialities);
   } catch (error) {
     res.status(500).json({ message: error.message });

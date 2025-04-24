@@ -11,10 +11,21 @@ exports.createTalentBook = async (req, res) => {
   }
 };
 
-// READ: Get all TalentBooks
+// READ: Get all TalentBooks or filter by character
 exports.getAllTalentBooks = async (req, res) => {
+  const character = req.query.character; // Get character from query parameter
+  const query = character ? { "characters.name": { $regex: character, $options: "i" } } : {}; // If character is provided, filter by character name
+
   try {
-    const items = await TalentBook.find(); // Fetch all TalentBooks
+    const items = await TalentBook.find(query); // Fetch all TalentBooks with optional filter for character
+
+    // If a character is specified, filter out others from the characters array
+    if (character) {
+      items.forEach(item => {
+        item.characters = item.characters.filter(c => c.name.toLowerCase() === character.toLowerCase());
+      });
+    }
+
     res.status(200).json(items);
   } catch (err) {
     res.status(500).json({ message: err.message });

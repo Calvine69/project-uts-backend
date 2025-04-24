@@ -1,4 +1,5 @@
 // controllers/talentMaterialController.js
+
 const TalentMaterial = require("../models/talentMaterial");
 
 // CREATE: Tambah satu atau banyak talent material

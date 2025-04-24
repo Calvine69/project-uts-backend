@@ -11,11 +11,48 @@ exports.createEvent = async (req, res) => {
   }
 };
 
-// READ: Ambil semua event
+// READ: Ambil semua event dengan filter optional
 exports.getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find();
-    res.json(events);
+    const { 
+      name, 
+      subtitle, 
+      eligibility, 
+      rewards, 
+      active 
+    } = req.query;
+
+    let filter = {};
+
+    // Filter berdasarkan nama
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' };
+    }
+
+    // Filter berdasarkan subtitle
+    if (subtitle) {
+      filter.subtitle = { $regex: subtitle, $options: 'i' };
+    }
+
+    // Filter berdasarkan eligibility
+    if (eligibility) {
+      filter.eligibility = { $regex: eligibility, $options: 'i' };
+    }
+
+    // Filter berdasarkan rewards
+    if (rewards) {
+      filter.rewards = { $elemMatch: { name: { $regex: rewards, $options: 'i' } } };
+    }
+
+    // Filter berdasarkan status aktif
+    if (active === 'true') {
+      const now = new Date();
+      filter.durationStart = { $lte: now };  // Event harus sudah dimulai
+      filter.durationEnd = { $gte: now };    // Event harus masih berlangsung
+    }
+
+    const events = await Event.find(filter);
+    res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,7 +65,7 @@ exports.getEventById = async (req, res) => {
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
     }
-    res.json(event);
+    res.status(200).json(event);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,7 +78,7 @@ exports.updateEvent = async (req, res) => {
     if (!updatedEvent) {
       return res.status(404).json({ error: 'Event not found' });
     }
-    res.json(updatedEvent);
+    res.status(200).json(updatedEvent);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -54,7 +91,7 @@ exports.deleteEvent = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ error: 'Event not found' });
     }
-    res.json({ message: 'Event deleted successfully' });
+    res.status(200).json({ message: 'Event deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -64,7 +101,7 @@ exports.deleteEvent = async (req, res) => {
 exports.deleteAllEvents = async (req, res) => {
   try {
     await Event.deleteMany({});
-    res.json({ message: 'All events deleted successfully' });
+    res.status(200).json({ message: 'All events deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

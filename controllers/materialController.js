@@ -11,10 +11,28 @@ exports.createMaterial = async (req, res) => {
   }
 };
 
-// READ: Ambil semua material
+// READ: Ambil semua material dengan filter
 exports.getAllMaterials = async (req, res) => {
   try {
-    const materials = await Material.find();
+    // Mengambil query parameter untuk filter
+    const { name, rarity, farmingDays } = req.query;
+
+    // Filter objek berdasarkan query parameter
+    const filter = {};
+
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' }; // Pencarian nama yang tidak sensitif terhadap huruf besar/kecil
+    }
+    if (rarity) {
+      filter.rarity = rarity; // Menyaring berdasarkan rarity
+    }
+    if (farmingDays) {
+      filter.farmingDays = { $in: [farmingDays] }; // Menyaring berdasarkan farmingDays
+    }
+
+    // Ambil data dengan filter
+    const materials = await Material.find(filter);
+
     res.json(materials);
   } catch (err) {
     res.status(500).json({ error: err.message });
