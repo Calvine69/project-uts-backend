@@ -11,10 +11,28 @@ exports.createCharacter = async (req, res) => {
   }
 };
 
-// READ: Ambil semua karakter
+// READ: Ambil semua karakter atau berdasarkan parameter tertentu
 exports.getAllCharacters = async (req, res) => {
   try {
-    const characters = await Character.find();
+    const { name, element, weaponType, gender } = req.query;  // Mendapatkan query parameter lainnya
+
+    let query = {};  // Inisialisasi query filter kosong
+
+    if (name) {
+      query.name = { $regex: name, $options: 'i' }; // Pencarian berdasarkan nama (case-insensitive)
+    }
+    if (element) {
+      query.element = { $regex: element, $options: 'i' }; // Pencarian berdasarkan element
+    }
+    if (weaponType) {
+      query.weaponType = { $regex: weaponType, $options: 'i' }; // Pencarian berdasarkan weaponType
+    }
+    if (gender) {
+      query.gender = { $regex: gender, $options: 'i' }; // Pencarian berdasarkan gender
+    }
+
+    const characters = await Character.find(query); // Pencarian karakter berdasarkan query yang dibuat
+
     res.json(characters);
   } catch (err) {
     res.status(500).json({ error: err.message });
