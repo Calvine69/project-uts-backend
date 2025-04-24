@@ -20,10 +20,27 @@ exports.createManyEnemyDrops = async (req, res) => {
   }
 };
 
-// GET semua enemy drop
+// GET semua enemy drop dengan filter
 exports.getAllEnemyDrops = async (req, res) => {
   try {
-    const drops = await EnemyDrop.find();
+    const { name, rarity, enemyFamily } = req.query;
+
+    // Membuat filter berdasarkan query parameter
+    const filter = {};
+
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' }; // Pencarian nama yang tidak sensitif terhadap huruf besar/kecil
+    }
+    if (rarity) {
+      filter.rarity = rarity; // Menyaring berdasarkan rarity
+    }
+    if (enemyFamily) {
+      filter.enemyFamily = { $in: [enemyFamily] }; // Menyaring berdasarkan enemyFamily
+    }
+
+    // Ambil data dengan filter
+    const drops = await EnemyDrop.find(filter);
+
     res.status(200).json(drops);
   } catch (err) {
     res.status(500).json({ message: err.message });
