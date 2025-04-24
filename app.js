@@ -34,6 +34,11 @@ app.use('/enemy', enemyRoutes);
 //Tambahkan routing talentbook
 const talentBookRoutes = require("./routes/talentBookRoutes");
 app.use("/talentBook", talentBookRoutes)
+const eventRoutes = require('./routes/eventRoutes');
+app.use('/events', eventRoutes);
+// Tambahkan routing Local Specialty
+const localSpecialtyRoutes = require('./routes/localSpecialtyRoutes');
+app.use('/localSpecialty', localSpecialtyRoutes);
 
 
 
