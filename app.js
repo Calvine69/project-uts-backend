@@ -39,6 +39,12 @@ app.use('/events', eventRoutes);
 // Tambahkan routing Local Specialty
 const localSpecialtyRoutes = require('./routes/localSpecialtyRoutes');
 app.use('/localSpecialty', localSpecialtyRoutes);
+// Tambahkan routing material
+const materialRoutes = require('./routes/materialRoutes');
+app.use('/material', materialRoutes);
+//Tambahkan routing talentMaterial
+const talentMaterialRoutes = require('./routes/talentMaterialRoutes');
+app.use('/talentMaterial', talentMaterialRoutes);
 
 
 
