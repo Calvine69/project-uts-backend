@@ -11,20 +11,62 @@ exports.createWeapon = async (req, res) => {
   }
 };
 
-// READ: Ambil semua weapon
+// READ: Ambil semua weapon (dengan optional filter)
 exports.getAllWeapons = async (req, res) => {
   try {
-    const weapons = await Weapon.find();
+    const {
+      name,
+      rarity,
+      weaponType,
+      isReleased,
+      source,
+      character,
+      ascensionMaterial
+    } = req.query;
+
+    let filter = {};
+
+    if (name) {
+      filter.name = { $regex: name, $options: 'i' };
+    }
+
+    if (rarity) {
+      filter.rarity = Number(rarity);
+    }
+
+    if (weaponType) {
+      filter.weaponType = weaponType;
+    }
+
+    if (isReleased !== undefined) {
+      filter.isReleased = isReleased === 'true';
+    }
+
+    if (source) {
+      filter.source = { $regex: source, $options: 'i' };
+    }
+
+    if (character) {
+      filter.characters = { $in: [new RegExp(character, 'i')] };
+    }
+
+    if (ascensionMaterial) {
+      filter.ascensionMaterials = { $in: [new RegExp(ascensionMaterial, 'i')] };
+    }
+
+    const weapons = await Weapon.find(filter);
     res.json(weapons);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// READ: Ambil weapon berdasarkan name
+// READ: Ambil weapon berdasarkan name (exact match with case-insensitive)
 exports.getWeaponByName = async (req, res) => {
   try {
-    const weapon = await Weapon.findOne({ name: req.params.name });
+    const weapon = await Weapon.findOne({
+      name: { $regex: `^${req.params.name}$`, $options: 'i' }
+    });
     if (!weapon) {
       return res.status(404).json({ error: "Weapon not found" });
     }
@@ -38,7 +80,7 @@ exports.getWeaponByName = async (req, res) => {
 exports.updateWeapon = async (req, res) => {
   try {
     const updatedWeapon = await Weapon.findOneAndUpdate(
-      { name: req.params.name },
+      { name: { $regex: `^${req.params.name}$`, $options: 'i' } },
       req.body,
       { new: true }
     );
@@ -54,7 +96,9 @@ exports.updateWeapon = async (req, res) => {
 // DELETE: Hapus weapon berdasarkan name
 exports.deleteWeapon = async (req, res) => {
   try {
-    const deleted = await Weapon.findOneAndDelete({ name: req.params.name });
+    const deleted = await Weapon.findOneAndDelete({
+      name: { $regex: `^${req.params.name}$`, $options: 'i' }
+    });
     if (!deleted) {
       return res.status(404).json({ error: "Weapon not found" });
     }
